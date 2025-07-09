@@ -1,43 +1,31 @@
 #pragma once
 
-#include <QImage>
-#include <QPainterPath>
-#include <QQuickPaintedItem>
+#include <QQuickFramebufferObject>
 #include <wayland-cutie-shell.h>
 #include <qt6-foreign-toplevel-management.h>
-#include <qt6-screencopy.h>
 
-class CutieAppThumbnail : public QQuickPaintedItem {
-	Q_OBJECT
-	QML_ELEMENT
-	Q_PROPERTY(CutieShell *wlc READ wlc WRITE setWlc NOTIFY wlcChanged)
-	Q_PROPERTY(ForeignToplevelHandleV1 *toplevel READ toplevel WRITE
-			   setToplevel NOTIFY toplevelChanged)
-    public:
-	CutieAppThumbnail(QQuickItem *parent = nullptr);
-	void paint(QPainter *painter) override;
+class CutieAppThumbnail : public QQuickFramebufferObject {
+    Q_OBJECT
+    QML_ELEMENT
 
-	CutieShell *wlc();
-	void setWlc(CutieShell *wlc);
+    Q_PROPERTY(CutieShell *wlc READ wlc WRITE setWlc NOTIFY wlcChanged)
+    Q_PROPERTY(ForeignToplevelHandleV1 *toplevel READ toplevel WRITE setToplevel NOTIFY toplevelChanged)
 
-	ForeignToplevelHandleV1 *toplevel();
-	void setToplevel(ForeignToplevelHandleV1 *toplevel);
+public:
+    CutieAppThumbnail(QQuickItem *parent = nullptr);
+    Renderer *createRenderer() const override; // 🆕 Needed for FBO
 
-    signals:
-	void wlcChanged(CutieShell *wlc);
-	void toplevelChanged(ForeignToplevelHandleV1 *toplevel);
+    CutieShell *wlc();
+    void setWlc(CutieShell *wlc);
 
-    private slots:
-	void onReady(QImage image);
-	void onFailed();
-	void onThumbnailDamage(void *object);
+    ForeignToplevelHandleV1 *toplevel();
+    void setToplevel(ForeignToplevelHandleV1 *toplevel);
 
-	void newFrame();
+signals:
+    void wlcChanged(CutieShell *wlc);
+    void toplevelChanged(ForeignToplevelHandleV1 *toplevel);
 
-    private:
-	CutieShell *m_wlc = nullptr;
-	ForeignToplevelHandleV1 *m_toplevel = nullptr;
-	ScreencopyFrameV1 *m_frame = nullptr;
-	QImage m_image;
-	bool copying = false;
+private:
+    CutieShell *m_wlc = nullptr;
+    ForeignToplevelHandleV1 *m_toplevel = nullptr;
 };
