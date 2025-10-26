@@ -1,5 +1,4 @@
 #include "cutieappthumbnail.h"
-#include <QTimer>
 
 CutieAppThumbnail::CutieAppThumbnail(QQuickItem *parent)
 	: QQuickPaintedItem(parent)
