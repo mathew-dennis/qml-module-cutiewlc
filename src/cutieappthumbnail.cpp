@@ -59,19 +59,25 @@ void CutieAppThumbnail::newFrame()
 
 void CutieAppThumbnail::onReady(QImage image)
 {
-    if (m_frozen) {
+	if (m_frozen) {
         copying = false;
+        if (m_frame) m_frame->deleteLater(); // <-- FIX: Release the frame on early exit
+        m_frame = nullptr;                   // <-- FIX
         return;
     }
 
     m_image = image;
     update(QRect(QPoint(), textureSize()));
     copying = false;
+	if (m_frame) m_frame->deleteLater(); // <-- FIX: Release the frame on success
+    m_frame = nullptr;                   // <-- FIX
 }
 
 void CutieAppThumbnail::onFailed()
 {
     copying = false;
+	if (m_frame) m_frame->deleteLater(); // <-- FIX: Release the frame on failure
+    m_frame = nullptr;                   // <-- FIX
 }
 
 void CutieAppThumbnail::onThumbnailDamage(void *object)
@@ -93,8 +99,15 @@ void CutieAppThumbnail::freeze()
 	if (m_frozen)
         return;
 
-    m_frozen = true;
-    qDebug() << "module - CutieAppThumbnail - frozen";
+	QTimer::singleShot(500, this, [this]() {
+        // Only freeze if we weren't resumed during the 500ms delay.
+        // This is a crucial check for this simplified approach!
+        if (!m_frozen) {
+            m_frozen = true;
+            qDebug() << "module - CutieAppThumbnail - frozen (after 0.5s delay)";
+        }
+    });
+	
 }
 
 void CutieAppThumbnail::resume()
