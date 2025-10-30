@@ -61,20 +61,17 @@ void CutieAppThumbnail::onReady(QImage image)
 {
 	if (m_frozen) {
         copying = false;
-                 // <-- FIX
         return;
     }
 
     m_image = image;
     update(QRect(QPoint(), textureSize()));
     copying = false;
-                 // <-- FIX
 }
 
 void CutieAppThumbnail::onFailed()
 {
     copying = false;
-                 // <-- FIX
 }
 
 void CutieAppThumbnail::onThumbnailDamage(void *object)
