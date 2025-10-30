@@ -106,8 +106,6 @@ void CutieAppThumbnail::freeze()
 
 void CutieAppThumbnail::resume()
 {
-    if (!m_frozen)
-        return;
 
     m_frozen = false;
 	qDebug() << "module - CutieAppThumbnail - resumed";
