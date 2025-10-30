@@ -61,23 +61,20 @@ void CutieAppThumbnail::onReady(QImage image)
 {
 	if (m_frozen) {
         copying = false;
-        if (m_frame) m_frame->deleteLater(); // <-- FIX: Release the frame on early exit
-        m_frame = nullptr;                   // <-- FIX
+                 // <-- FIX
         return;
     }
 
     m_image = image;
     update(QRect(QPoint(), textureSize()));
     copying = false;
-	if (m_frame) m_frame->deleteLater(); // <-- FIX: Release the frame on success
-    m_frame = nullptr;                   // <-- FIX
+                 // <-- FIX
 }
 
 void CutieAppThumbnail::onFailed()
 {
     copying = false;
-	if (m_frame) m_frame->deleteLater(); // <-- FIX: Release the frame on failure
-    m_frame = nullptr;                   // <-- FIX
+                 // <-- FIX
 }
 
 void CutieAppThumbnail::onThumbnailDamage(void *object)
