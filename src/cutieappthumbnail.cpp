@@ -34,7 +34,7 @@ void CutieAppThumbnail::setToplevel(ForeignToplevelHandleV1 *toplevel)
     m_toplevel = toplevel;
     emit toplevelChanged(m_toplevel);
 
-    if (m_wlc && m_toplevel && !copying && !m_frozen) {
+    if (m_wlc && m_toplevel && !copying) {
         copying = true;
         QTimer::singleShot(50, this, &CutieAppThumbnail::newFrame);
     }
@@ -47,7 +47,7 @@ void CutieAppThumbnail::paint(QPainter *painter)
 
 void CutieAppThumbnail::newFrame()
 {
-    if (!m_wlc || !m_toplevel || m_frozen)
+    if (!m_wlc || !m_toplevel)
         return;
 
     m_frame = m_wlc->getThumbnail(m_toplevel);
@@ -59,10 +59,6 @@ void CutieAppThumbnail::newFrame()
 
 void CutieAppThumbnail::onReady(QImage image)
 {
-	if (m_frozen) {
-        copying = false;
-        return;
-    }
 
     m_image = image;
     update(QRect(QPoint(), textureSize()));
