@@ -86,17 +86,10 @@ void CutieAppThumbnail::onThumbnailDamage(void *object)
 // --- Freeze / Resume ---
 void CutieAppThumbnail::freeze()
 {
-	if (m_frozen)
-        return;
 
-	QTimer::singleShot(500, this, [this]() {
-        // Only freeze if we weren't resumed during the 500ms delay.
-        // This is a crucial check for this simplified approach!
-        if (!m_frozen) {
-            m_frozen = true;
-            qDebug() << "module - CutieAppThumbnail - frozen (after 0.5s delay)";
-        }
-    });
+    m_frozen = true;
+    qDebug() << "module - CutieAppThumbnail - frozen (after 0.5s delay)";
+        
 	
 }
 
