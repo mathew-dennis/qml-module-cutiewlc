@@ -109,7 +109,4 @@ void CutieAppThumbnail::resume()
 
     m_frozen = false;
 	qDebug() << "module - CutieAppThumbnail - resumed";
-
-    if (m_toplevel && !copying)
-        QTimer::singleShot(50, this, &CutieAppThumbnail::newFrame);
 }
